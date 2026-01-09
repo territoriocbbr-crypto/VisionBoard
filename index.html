@@ -1,187 +1,162 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Vision Board 🌻</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vision Board</title>
 
-  <!-- Tipografías acordadas -->
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>Vision Board</h1>
-  <p>Un paso a la vez, todo cuenta</p>
-</header>
+  <h1 id="resetTitle">🌻 Vision Board 🌻</h1>
 
-<main class="board">
+  <div class="grid">
+    <!-- 1 -->
+    <div class="note" data-id="1">
+      <div class="note-front">🩺 Salud</div>
+      <div class="note-back">Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad.</div>
+    </div>
 
-  <div class="note" data-id="1">
-    <div class="note-front">🌿 Salud</div>
-    <div class="note-back">
-      Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad.
+    <!-- 2 -->
+    <div class="note" data-id="2">
+      <div class="note-front">✈️ Viajes</div>
+      <div class="note-back">Fuiste valiente al salir, y el mundo respondió abriéndote caminos.  
+Cada viaje te devolvió un poco más de ti</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="note" data-id="3">
+      <div class="note-front">💼 Estabilidad Laboral</div>
+      <div class="note-back">Todo el esfuerzo silencioso encontró su lugar. Te lo mereces siempre has sido una gran trabajadora y la más hábil en tu campo, te deseo más y más crecimiento laboral. Vamos por más puntos.</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="note" data-id="4">
+      <div class="note-front">💙 Amor propio</div>
+      <div class="note-back">Aprendiste a tratarte con la misma ternura que das a los demás, eres un tesoro no para presumir si no para apreciar y valorar.</div>
+    </div>
+
+    <!-- 5 -->
+    <div class="note" data-id="5">
+      <div class="note-front">🛂 Pasaporte</div>
+      <div class="note-back">Un documento pequeño… y un mundo entero diciendo “bienvenida”.</div>
+    </div>
+
+    <!-- 6 -->
+    <div class="note" data-id="6">
+      <div class="note-front">😄 Reír más seguido</div>
+      <div class="note-back">Excelenteeee me alegra saber que estas cada vez más feliz, Quizá no siempre logre sacarte una sonrisa, pero espero que nunca falte la esperanza de tu sonrisa en el mundo.</div>
+    </div>
+
+    <!-- 7 -->
+    <div class="note" data-id="7">
+      <div class="note-front">🚗 Licencia</div>
+      <div class="note-back">Lo lograste, te felicito muchísimo ahora tú llevas el volante, en todos los sentidos, y espero que en algunas de esas ocasiones pueda ser tu copiloto.</div>
+    </div>
+
+    <!-- 8 -->
+    <div class="note" data-id="8">
+      <div class="note-front">💰 Ahorrar</div>
+      <div class="note-back">Paso a paso construiste tranquilidad. Y eso también es éxito, ya puedes comprarme algo también jeje.</div>
+    </div>
+
+    <!-- 9 -->
+    <div class="note" data-id="9">
+      <div class="note-front">🏠 Tener mi apartamento</div>
+      <div class="note-back">Aquí empieza un hogar hecho a tu medida y a tu ritmo, aprovecha tu espacio y acomódalo a tu gusto.</div>
+    </div>
+
+    <!-- 10 -->
+    <div class="note" data-id="10">
+      <div class="note-front">🎵 Música</div>
+      <div class="note-back">¿Que? ¿En serio? ¿Lograste aprender un instrumento? Te felicito, pero por favor dame el placer de escucharte practicar, que seria mas lindo que tu carita acompañada de música que tu misma haces.</div>
+    </div>
+
+    <!-- 11 -->
+    <div class="note" data-id="11">
+      <div class="note-front">🙏 Acercarme a Dios</div>
+      <div class="note-back">Bien, ahora soy yo quien necesita acercarse a él, y pedir que pueda seguir acompañándote en tu camino, no fue distancia lo que recorriste, fue profundidad.</div>
+    </div>
+
+    <!-- 12 -->
+    <div class="note" data-id="12">
+      <div class="note-front">✨ Agradecer</div>
+      <div class="note-back">Aprendiste a ver lo que antes pasaba desapercibido, muchas veces no somos conscientes de lo que nos rodea y lo que hacen quienes nos rodean, si se esfuerzan por ti es porque eres valiosa pero también es valioso el esfuerzo que te dedican. Vamos por mas puntos monita.</div>
+    </div>
+
+    <!-- 13 -->
+    <div class="note" data-id="13">
+      <div class="note-front">💵 Dinero</div>
+      <div class="note-back">Hoy el dinero dejó de ser peso y se volvió herramienta, que este sea un motivo para continuar con tus ideas, con tus sueños, ¿y porque no? Tus antojos, date gusto.</div>
+    </div>
+
+    <!-- 14 -->
+    <div class="note" data-id="14">
+      <div class="note-front">🥗 Alimentarme bien</div>
+      <div class="note-back">Urraaaaa me alegra que completaras este, aunque ojalá puedas seguir recibiendo la comida que te envíe, mi forma de consentirte era alimentándote, Te cuidaste sin castigarte. Eso también es amor.</div>
+    </div>
+
+    <!-- 15 -->
+    <div class="note" data-id="15">
+      <div class="note-front">📚 Leer</div>
+      <div class="note-back">Cada página fue una conversación contigo misma, sigue conociéndote, sigue aprendiendo y nunca dejes de crecer, si hoy eres fascinante, ¿cómo serás en unos años?</div>
+    </div>
+
+    <!-- 16 -->
+    <div class="note" data-id="16">
+      <div class="note-front">🚀 Emprendimiento</div>
+      <div class="note-back">Te atreviste a creer en tu idea cuando aún era frágil, y hoy tienes el empuje para cumplirla, recuerda que esto es solo una pequeña parte de todo lo que eres capaz de hacer, sigue mas allá de la meta.</div>
+    </div>
+
+    <!-- 17 -->
+    <div class="note" data-id="17">
+      <div class="note-front">👨‍👩‍👧 Compartir</div>
+      <div class="note-back">Quizás no todos merecen tu tiempo, pero identificar a quienes si hace que el tiempo compartido siempre sea la mejor inversión.</div>
+    </div>
+
+    <!-- 18 -->
+    <div class="note" data-id="18">
+      <div class="note-front">🎶 Música</div>
+      <div class="note-back">Gracias por no soltar lo que te sostiene por dentro, Nunca dejaste que el ruido apagara lo que te hace vibrar, además un día me pondrás el micrófono y si sabre como es la letra de la canción para que la cantemos al unisonó.</div>
+    </div>
+
+    <!-- 19 -->
+    <div class="note" data-id="19">
+      <div class="note-front">🧘 Cuidarme</div>
+      <div class="note-back">Escucharte fue el acto más valiente, no esperes soluciones externas cuando quien realmente debe identificar lo grandiosa que es, eres tú misma.</div>
+    </div>
+
+    <!-- 20 -->
+    <div class="note" data-id="20">
+      <div class="note-front">🌻 Girasoles</div>
+      <div class="note-back">Si cumpliste este espero haber sido participe de esta meta, y haberte dado mas flores este año sin que te lo esperaras y permitiéndome el pequeño capricho de verte feliz.</div>
     </div>
   </div>
 
-  <div class="note" data-id="2">
-    <div class="note-front">✈️ Viajes</div>
-    <div class="note-back">
-      Fuiste valiente al salir, y el mundo respondió abriéndote caminos. Cada viaje te devolvió un poco más de ti.
+  <!-- Última fila -->
+  <div class="grid last-row">
+    <div class="note" data-id="21">
+      <div class="note-front">📆 Disciplina</div>
+      <div class="note-back">No fue rigidez, fue constancia con propósito lo que te permitió lograr cada una de las metas y propósitos, de poco a poco se logran las grandes cosas así que nunca desistas de seguirlo intentando, de seguir luchando por lo que mereces.</div>
+    </div>
+
+    <div class="note" data-id="22">
+      <div class="note-front">🌍 Idiomas</div>
+      <div class="note-back">Ahora tus ideas también saben viajar en otros idiomas espero ahora si podamos escuchar más música en ingles jeje y que pueda alocarme escuchándote hablar en francés, porque se que te queda muy bien.</div>
+    </div>
+
+    <div class="note" data-id="23">
+      <div class="note-front">🎓 Estudiar</div>
+      <div class="note-back">Seguiste creciendo incluso cuando nadie estaba mirando y es que eso eres tú, alguien que posee la capacidad de crecer mas de lo que los demás llegaron a creer, sigue así.</div>
     </div>
   </div>
 
-  <div class="note" data-id="3">
-    <div class="note-front">💼 Estabilidad laboral</div>
-    <div class="note-back">
-      Todo el esfuerzo silencioso encontró su lugar. Te lo mereces siempre has sido una gran trabajadora y la más hábil en tu campo, vamos por más puntos.
-    </div>
-  </div>
-
-  <div class="note" data-id="4">
-    <div class="note-front">💖 Amor propio</div>
-    <div class="note-back">
-      Aprendiste a tratarte con la misma ternura que das a los demás, eres un tesoro no para presumir si no para apreciar y valorar.
-    </div>
-  </div>
-
-  <div class="note" data-id="5">
-    <div class="note-front">🛂 Pasaporte</div>
-    <div class="note-back">
-      Un documento pequeño… y un mundo entero diciendo “bienvenida”.
-    </div>
-  </div>
-
-  <div class="note" data-id="6">
-    <div class="note-front">😄 Reír más seguido</div>
-    <div class="note-back">
-      Excelenteeee me alegra saber que estas cada vez más feliz, quizá no siempre logre sacarte una sonrisa, pero espero que nunca falte la esperanza de tu sonrisa en el mundo.
-    </div>
-  </div>
-
-  <div class="note" data-id="7">
-    <div class="note-front">🚗 Licencia</div>
-    <div class="note-back">
-      Lo lograste, ahora tú llevas el volante en todos los sentidos, y espero que en algunas ocasiones pueda ser tu copiloto.
-    </div>
-  </div>
-
-  <div class="note" data-id="8">
-    <div class="note-front">💰 Ahorrar</div>
-    <div class="note-back">
-      Paso a paso construiste tranquilidad. Y eso también es éxito, ya puedes comprarme algo también jeje.
-    </div>
-  </div>
-
-  <div class="note" data-id="9">
-    <div class="note-front">🏠 Tener mi apartamento</div>
-    <div class="note-back">
-      Aquí empieza un hogar hecho a tu medida y a tu ritmo, aprovecha tu espacio y acomódalo a tu gusto.
-    </div>
-  </div>
-
-  <div class="note" data-id="10">
-    <div class="note-front">🎶 Música</div>
-    <div class="note-back">
-      ¿Qué? ¿En serio? Te felicito, pero dame el placer de escucharte practicar, no hay nada más lindo que tu carita acompañada de música.
-    </div>
-  </div>
-
-  <div class="note" data-id="11">
-    <div class="note-front">🙏 Acercarme a Dios</div>
-    <div class="note-back">
-      No fue distancia lo que recorriste, fue profundidad. Que sigas caminando con fe.
-    </div>
-  </div>
-
-  <div class="note" data-id="12">
-    <div class="note-front">🌱 Agradecer</div>
-    <div class="note-back">
-      Aprendiste a ver lo que antes pasaba desapercibido. Vamos por más puntos, monita.
-    </div>
-  </div>
-
-  <div class="note" data-id="13">
-    <div class="note-front">💵 Dinero</div>
-    <div class="note-back">
-      Hoy el dinero dejó de ser peso y se volvió herramienta. Date gusto.
-    </div>
-  </div>
-
-  <div class="note" data-id="14">
-    <div class="note-front">🥗 Alimentarme bien</div>
-    <div class="note-back">
-      Te cuidaste sin castigarte. Eso también es amor. Urraaaaa.
-    </div>
-  </div>
-
-  <div class="note" data-id="15">
-    <div class="note-front">📚 Leer</div>
-    <div class="note-back">
-      Cada página fue una conversación contigo misma. Nunca dejes de crecer.
-    </div>
-  </div>
-
-  <div class="note" data-id="16">
-    <div class="note-front">🚀 Emprendimiento</div>
-    <div class="note-back">
-      Creíste en tu idea cuando aún era frágil. Sigue más allá de la meta.
-    </div>
-  </div>
-
-  <div class="note" data-id="17">
-    <div class="note-front">👨‍👩‍👧 Compartir</div>
-    <div class="note-back">
-      Identificar a quienes sí merecen tu tiempo hace que todo valga más.
-    </div>
-  </div>
-
-  <div class="note" data-id="18">
-    <div class="note-front">🎤 No alejarme de la música</div>
-    <div class="note-back">
-      Gracias por no soltar lo que te sostiene por dentro. Un día cantaremos al unísono.
-    </div>
-  </div>
-
-  <div class="note" data-id="19">
-    <div class="note-front">🧠 Cuidarme</div>
-    <div class="note-back">
-      Escucharte fue el acto más valiente. Tú eres quien debe reconocer lo grandiosa que es.
-    </div>
-  </div>
-
-  <div class="note" data-id="20">
-    <div class="note-front">🌻 Girasoles</div>
-    <div class="note-back">
-      Ojalá haya sido parte de esta meta y de verte feliz sin que lo esperaras.
-    </div>
-  </div>
-
-  <div class="note" data-id="21">
-    <div class="note-front">⏳ Disciplina</div>
-    <div class="note-back">
-      No fue rigidez, fue constancia. Así se logran las grandes cosas.
-    </div>
-  </div>
-
-  <div class="note" data-id="22">
-    <div class="note-front">🌍 Idiomas</div>
-    <div class="note-back">
-      Ahora tus ideas también viajan en inglés y francés. Te queda muy bien.
-    </div>
-  </div>
-
-  <div class="note" data-id="23">
-    <div class="note-front">🎓 Estudiar</div>
-    <div class="note-back">
-      Seguiste creciendo incluso cuando nadie estaba mirando. Sigue así.
-    </div>
-  </div>
-
-</main>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
