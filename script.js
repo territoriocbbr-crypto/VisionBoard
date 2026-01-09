@@ -1,3 +1,4 @@
+// Apertura de notas
 document.querySelectorAll(".note").forEach(note=>{
   const id = note.dataset.id;
 
@@ -13,22 +14,23 @@ document.querySelectorAll(".note").forEach(note=>{
   });
 });
 
-// Reset oculto (5 segundos)
+// Reset por presión larga (5s)
 const title = document.getElementById("resetTitle");
-let timer=null;
+let pressTimer = null;
 
-const startReset=()=>{
-  timer=setTimeout(()=>{
+const startPress = ()=>{
+  pressTimer = setTimeout(()=>{
     localStorage.clear();
     document.querySelectorAll(".note").forEach(n=>n.classList.remove("open"));
-    alert("Metas reiniciadas");
   },5000);
 };
 
-const cancelReset=()=>clearTimeout(timer);
+const cancelPress = ()=>{
+  if(pressTimer) clearTimeout(pressTimer);
+};
 
-title.addEventListener("mousedown",startReset);
-title.addEventListener("touchstart",startReset);
-title.addEventListener("mouseup",cancelReset);
-title.addEventListener("mouseleave",cancelReset);
-title.addEventListener("touchend",cancelReset);
+title.addEventListener("mousedown",startPress);
+title.addEventListener("touchstart",startPress);
+title.addEventListener("mouseup",cancelPress);
+title.addEventListener("mouseleave",cancelPress);
+title.addEventListener("touchend",cancelPress);
