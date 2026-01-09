@@ -183,6 +183,17 @@ header{
 <div id="prizeCard"></div>
 
 <script>
+/* ===========================
+   CONFIGURACIÓN
+=========================== */
+
+const HITOS = [300, 600, 900, 960];
+const PREMIOS = ["Cena", "Viaje", "Regalo", "Sorpresa"];
+
+/* ===========================
+   METAS (NO CAMBIO FRASES)
+=========================== */
+
 const metas = [
 {t:"💙 Salud",p:20,f:"Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad."},
 {t:"✈️ Viajes",p:30,f:"Fuiste valiente al salir, y el mundo respondió abriéndote caminos.\nCada viaje te devolvió un poco más de ti"},
@@ -209,67 +220,106 @@ const metas = [
 {t:"🎓 Estudiar",p:50,f:"Seguiste creciendo incluso cuando nadie estaba mirando y es que eso eres tú, alguien que posee la capacidad de crecer mas de lo que los demás llegaron a creer, sigue así."}
 ];
 
-const board=document.getElementById("board");
-const overlay=document.getElementById("rouletteOverlay");
-const result=document.getElementById("rouletteResult");
-const prizeCard=document.getElementById("prizeCard");
+/* ===========================
+   ESTADO PERSISTENTE
+=========================== */
 
-let opened=JSON.parse(localStorage.getItem("opened")||"[]");
-let claimed=JSON.parse(localStorage.getItem("claimed")||"[]");
+let opened = JSON.parse(localStorage.getItem("opened") || "[]");
+let puntos = JSON.parse(localStorage.getItem("puntos") || "0");
+let hitosReclamados = JSON.parse(localStorage.getItem("hitos") || "[]");
 
-metas.forEach((m,i)=>{
-  const note=document.createElement("div");
-  note.className="note";
-  if(opened.includes(i)) note.classList.add("open");
+/* ===========================
+   ELEMENTOS DOM
+=========================== */
 
-  note.innerHTML=`
+const board = document.getElementById("board");
+const overlay = document.getElementById("rouletteOverlay");
+const result = document.getElementById("rouletteResult");
+const prizeCard = document.getElementById("prizeCard");
+
+/* ===========================
+   RENDER METAS
+=========================== */
+
+metas.forEach((m, i) => {
+  const note = document.createElement("div");
+  note.className = "note";
+
+  if (opened.includes(i)) {
+    note.classList.add("open");
+  }
+
+  note.innerHTML = `
     <div class="note-inner">
       <div class="note-face note-front">${m.t}</div>
       <div class="note-face note-back">${m.f}</div>
-    </div>`;
+    </div>
+  `;
 
-  note.onclick=()=>{
-    if(!note.classList.contains("open")){
-      note.classList.add("open");
-      opened.push(i);
-      localStorage.setItem("opened",JSON.stringify(opened));
-      evaluarRuleta();
-    }
+  note.onclick = () => {
+    if (opened.includes(i)) return;
+
+    note.classList.add("open");
+    opened.push(i);
+    puntos += m.p;
+
+    localStorage.setItem("opened", JSON.stringify(opened));
+    localStorage.setItem("puntos", puntos);
+
+    evaluarHito();
   };
 
   board.appendChild(note);
 });
 
-function evaluarRuleta(){
-  const total=opened.reduce((s,i)=>s+metas[i].p,0);
-  const hitos=[300,600,900,960];
-  if(hitos.includes(total) && !claimed.includes(total)){
-    claimed.push(total);
-    localStorage.setItem("claimed",JSON.stringify(claimed));
-    overlay.style.display="flex";
+/* ===========================
+   LÓGICA DE HITOS
+=========================== */
+
+function evaluarHito() {
+  for (let hito of HITOS) {
+    if (puntos >= hito && !hitosReclamados.includes(hito)) {
+      hitosReclamados.push(hito);
+      localStorage.setItem("hitos", JSON.stringify(hitosReclamados));
+      mostrarRuleta();
+      break;
+    }
   }
 }
 
-document.getElementById("spinBtn").onclick=()=>{
-  const premios=["Cena","Viaje","Regalo","Sorpresa"];
-  const p=premios[Math.floor(Math.random()*premios.length)];
-  result.innerText="🎁 Premio: "+p;
-  prizeCard.innerText="🎁 Premio pendiente: "+p;
-  prizeCard.style.display="block";
+/* ===========================
+   RULETA
+=========================== */
+
+function mostrarRuleta() {
+  overlay.style.display = "flex";
+}
+
+document.getElementById("spinBtn").onclick = () => {
+  const premio = PREMIOS[Math.floor(Math.random() * PREMIOS.length)];
+  result.innerText = "🎁 Premio: " + premio;
+
+  prizeCard.innerText = "🎁 Premio pendiente: " + premio;
+  prizeCard.style.display = "block";
 };
 
-document.getElementById("closeRoulette").onclick=()=>{
-  overlay.style.display="none";
-  result.innerText="";
+document.getElementById("closeRoulette").onclick = () => {
+  overlay.style.display = "none";
+  result.innerText = "";
 };
 
-/* RESET 5s SOBRE TITULO */
+/* ===========================
+   RESET SECRETO (5s)
+=========================== */
+
 let timer;
-title.onmousedown=()=>timer=setTimeout(()=>{
-  localStorage.clear();
-  location.reload();
-},5000);
-document.onmouseup=()=>clearTimeout(timer);
+title.onmousedown = () => {
+  timer = setTimeout(() => {
+    localStorage.clear();
+    location.reload();
+  }, 5000);
+};
+document.onmouseup = () => clearTimeout(timer);
 </script>
 
 </body>
