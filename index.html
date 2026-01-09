@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Vision Board</title>
-<subtitle>Un paso a la vez, todo cuenta</subtitle>
-  
+<title>Mis Metas</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
@@ -22,19 +21,27 @@ body::before{
   position:fixed;
   inset:0;
   background:url("girasol.png") center/70% no-repeat;
-  opacity:0.06;
+  opacity:0.05;
   pointer-events:none;
   z-index:-1;
 }
 
 /* TITULO */
-#title{
+header{
   text-align:center;
+  padding:24px 10px 10px;
+}
+
+#title{
   font-family:'Playfair Display',serif;
   font-size:3rem;
   color:#355c9a;
-  padding:20px;
-  user-select:none;
+}
+
+#subtitle{
+  margin-top:6px;
+  font-size:1.1rem;
+  color:#5c7fbf;
 }
 
 /* TABLERO */
@@ -48,17 +55,27 @@ body::before{
 }
 
 /* NOTAS */
-.note{height:170px;perspective:1200px;cursor:pointer}
+.note{
+  height:170px;
+  perspective:1200px;
+  cursor:pointer;
+}
+
 .note-inner{
-  width:100%;height:100%;
+  width:100%;
+  height:100%;
   transition:transform .9s cubic-bezier(.4,.2,.2,1);
   transform-style:preserve-3d;
 }
-.note.open .note-inner{transform:rotateY(180deg) translateY(-8px)}
+
+.note.open .note-inner{
+  transform:rotateY(180deg) translateY(-8px);
+}
 
 .note-face{
-  position:absolute;inset:0;
-  border-radius:10px;
+  position:absolute;
+  inset:0;
+  border-radius:12px;
   padding:14px;
   display:flex;
   align-items:center;
@@ -71,7 +88,7 @@ body::before{
   background:#cfe0ff;
   color:#1f3c6d;
   font-weight:600;
-  box-shadow:0 6px 12px rgba(0,0,0,.15);
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
 }
 
 .note-back{
@@ -81,7 +98,7 @@ body::before{
   font-size:.9rem;
   line-height:1.25;
   transform:rotateY(180deg);
-  box-shadow:0 6px 12px rgba(0,0,0,.15);
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
 }
 
 /* RULETA */
@@ -89,33 +106,37 @@ body::before{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
-  z-index:20;
+  z-index:50;
 }
-
-.hidden{display:none}
 
 #rouletteBox{
   background:#fff;
-  border-radius:16px;
-  padding:30px;
+  border-radius:18px;
+  padding:30px 26px;
   text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
 
 #spinBtn,#closeRoulette{
-  margin-top:12px;
-  padding:10px 20px;
+  margin-top:14px;
+  padding:10px 22px;
   font-size:1rem;
   border:none;
   border-radius:8px;
   cursor:pointer;
 }
 
-#spinBtn{background:#355c9a;color:white}
-#closeRoulette{background:#ddd}
+#spinBtn{
+  background:#355c9a;
+  color:white;
+}
+
+#closeRoulette{
+  background:#ddd;
+}
 
 /* CARTA PREMIO */
 #prizeCard{
@@ -123,24 +144,34 @@ body::before{
   bottom:20px;
   right:20px;
   background:#fff;
-  border-radius:12px;
+  border-radius:14px;
   padding:16px 20px;
   box-shadow:0 10px 25px rgba(0,0,0,.25);
   font-family:'Playfair Display',serif;
+  display:none;
 }
 
-@media(max-width:900px){.board{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.board{grid-template-columns:repeat(2,1fr)}}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .board{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  .board{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 
 <body>
 
-<h1 id="title">Mis metas</h1>
+<header>
+  <h1 id="title">Mis metas</h1>
+  <div id="subtitle">Un paso a la vez, todo cuenta</div>
+</header>
+
 <div class="board" id="board"></div>
 
 <!-- RULETA -->
-<div id="rouletteOverlay" class="hidden">
+<div id="rouletteOverlay">
   <div id="rouletteBox">
     <h2>🎡 Premio</h2>
     <button id="spinBtn">Girar</button>
@@ -149,7 +180,7 @@ body::before{
   </div>
 </div>
 
-<div id="prizeCard" class="hidden"></div>
+<div id="prizeCard"></div>
 
 <script>
 const metas = [
@@ -179,8 +210,8 @@ const metas = [
 ];
 
 const board=document.getElementById("board");
-const rouletteOverlay=document.getElementById("rouletteOverlay");
-const rouletteResult=document.getElementById("rouletteResult");
+const overlay=document.getElementById("rouletteOverlay");
+const result=document.getElementById("rouletteResult");
 const prizeCard=document.getElementById("prizeCard");
 
 let opened=JSON.parse(localStorage.getItem("opened")||"[]");
@@ -215,26 +246,29 @@ function evaluarRuleta(){
   if(hitos.includes(total) && !claimed.includes(total)){
     claimed.push(total);
     localStorage.setItem("claimed",JSON.stringify(claimed));
-    rouletteOverlay.classList.remove("hidden");
+    overlay.style.display="flex";
   }
 }
 
 document.getElementById("spinBtn").onclick=()=>{
   const premios=["Cena","Viaje","Regalo","Sorpresa"];
   const p=premios[Math.floor(Math.random()*premios.length)];
-  rouletteResult.innerText="🎁 Premio: "+p;
+  result.innerText="🎁 Premio: "+p;
   prizeCard.innerText="🎁 Premio pendiente: "+p;
-  prizeCard.classList.remove("hidden");
+  prizeCard.style.display="block";
 };
 
 document.getElementById("closeRoulette").onclick=()=>{
-  rouletteOverlay.classList.add("hidden");
-  rouletteResult.innerText="";
+  overlay.style.display="none";
+  result.innerText="";
 };
 
-/* RESET 5s */
+/* RESET 5s SOBRE TITULO */
 let timer;
-title.onmousedown=()=>timer=setTimeout(()=>{localStorage.clear();location.reload()},5000);
+title.onmousedown=()=>timer=setTimeout(()=>{
+  localStorage.clear();
+  location.reload();
+},5000);
 document.onmouseup=()=>clearTimeout(timer);
 </script>
 
