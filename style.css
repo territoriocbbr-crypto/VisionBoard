@@ -121,3 +121,110 @@ h1{
 @media(max-width:500px){
   .grid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* RULETA */
+.roulette{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+}
+
+.hidden{display:none;}
+
+.wheel{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  border:8px solid #cfa95f;
+  background:conic-gradient(
+    #f7e7c1 0deg 90deg,
+    #fdeecf 90deg 180deg,
+    #f7e7c1 180deg 270deg,
+    #fdeecf 270deg 360deg
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  transition:transform 3s cubic-bezier(.17,.67,.3,1);
+}
+
+.slice{
+  position:absolute;
+  width:50%;
+  text-align:right;
+  transform-origin:left center;
+  right:50%;
+  font-weight:600;
+}
+
+.slice:nth-child(1){transform:rotate(45deg);}
+.slice:nth-child(2){transform:rotate(135deg);}
+.slice:nth-child(3){transform:rotate(225deg);}
+.slice:nth-child(4){transform:rotate(315deg);}
+
+.pointer{
+  width:0;
+  height:0;
+  border-left:15px solid transparent;
+  border-right:15px solid transparent;
+  border-bottom:30px solid #b87333;
+  margin-bottom:15px;
+}
+
+#spinBtn{
+  margin-top:20px;
+  padding:10px 20px;
+  font-size:1rem;
+  border:none;
+  border-radius:20px;
+  background:#4a7ebc;
+  color:white;
+  cursor:pointer;
+}
+
+/* CARTA */
+.prize{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:60;
+}
+
+.card{
+  width:120px;
+  height:160px;
+  perspective:800px;
+}
+
+.card-front,.card-back{
+  position:absolute;
+  inset:0;
+  background:#fffdf7;
+  border-radius:12px;
+  border:3px solid #cfa95f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backface-visibility:hidden;
+  transition:transform .8s;
+}
+
+.card-back{
+  transform:rotateY(180deg);
+  padding:10px;
+  text-align:center;
+  font-family:'Playfair Display',serif;
+}
+
+.card.open .card-front{
+  transform:rotateY(180deg);
+}
+.card.open .card-back{
+  transform:rotateY(0deg);
+}
