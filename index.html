@@ -3,48 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <title>Vision Board</title>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
   <header>
-    <h1 class="title">🌻 Vision Board 🌻</h1>
-    <p class="subtitle">Un paso a la vez, todo cuenta</p>
+    <h1>Vision Board</h1>
+    <p>Un paso a la vez, todo cuenta</p>
   </header>
 
-  <main id="goals-container">
-    <div class="goal">💖 Salud</div>
-    <div class="goal">✈️ Viajes</div>
-    <div class="goal">💼 Estabilidad laboral</div>
-    <div class="goal">🌷 Amor propio</div>
-    <div class="goal">🛂 Pasaporte</div>
-    <div class="goal">😂 Reír más seguido</div>
-    <div class="goal">🚗 Licencia</div>
-    <div class="goal">💰 Ahorrar</div>
-    <div class="goal">🏠 Tener mi apartamento</div>
-    <div class="goal">🎵 Música (instrumento)</div>
-    <div class="goal">🙏 Acercarme a Dios</div>
-    <div class="goal">🌼 Agradecer</div>
-    <div class="goal">💸 Dinero</div>
-    <div class="goal">🥗 Alimentarme bien</div>
-    <div class="goal">📚 Leer</div>
-    <div class="goal">🚀 Emprendimiento</div>
-    <div class="goal">👨‍👩‍👧 Familia y amigos</div>
-    <div class="goal">🎧 No alejarme de la música</div>
-    <div class="goal">🧘‍♀️ Cuidarme</div>
-    <div class="goal">🌻 Girasoles</div>
-    <div class="goal">🕊️ Disciplina</div>
-    <div class="goal">🌍 Idiomas</div>
-    <div class="goal">🎓 Estudiar</div>
+  <main class="board">
+
+    <!-- NOTA -->
+    <div class="note" data-id="1">
+      <div class="note-front">🌿 Salud</div>
+      <div class="note-back">
+        Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad.
+      </div>
+    </div>
+
+    <div class="note" data-id="2">
+      <div class="note-front">✈️ Viajes</div>
+      <div class="note-back">
+        Fuiste valiente al salir, y el mundo respondió abriéndote caminos. Cada viaje te devolvió un poco más de ti.
+      </div>
+    </div>
+
+    <div class="note" data-id="3">
+      <div class="note-front">💼 Estabilidad laboral</div>
+      <div class="note-back">
+        Todo el esfuerzo silencioso encontró su lugar. Te lo mereces siempre has sido una gran trabajadora y la más hábil en tu campo. Vamos por más puntos.
+      </div>
+    </div>
+
+    <div class="note" data-id="4">
+      <div class="note-front">💖 Amor propio</div>
+      <div class="note-back">
+        Aprendiste a tratarte con la misma ternura que das a los demás, eres un tesoro no para presumir si no para apreciar y valorar.
+      </div>
+    </div>
+
+    <div class="note" data-id="5">
+      <div class="note-front">🛂 Pasaporte</div>
+      <div class="note-back">
+        Un documento pequeño… y un mundo entero diciendo “bienvenida”.
+      </div>
+    </div>
+
+    <div class="note" data-id="6">
+      <div class="note-front">😄 Reír más seguido</div>
+      <div class="note-back">
+        Excelenteeee me alegra saber que estas cada vez más feliz, quizá no siempre logre sacarte una sonrisa, pero espero que nunca falte la esperanza de tu sonrisa en el mundo.
+      </div>
+    </div>
+
+    <div class="note" data-id="7">
+      <div class="note-front">🚗 Licencia</div>
+      <div class="note-back">
+        Lo lograste, ahora tú llevas el volante en todos los sentidos, y espero que en algunas ocasiones pueda ser tu copiloto.
+      </div>
+    </div>
+
+    <div class="note" data-id="8">
+      <div class="note-front">💰 Ahorrar</div>
+      <div class="note-back">
+        Paso a paso construiste tranquilidad. Y eso también es éxito, ya puedes comprarme algo también jeje.
+      </div>
+    </div>
+
+    <div class="note" data-id="9">
+      <div class="note-front">🏠 Mi apartamento</div>
+      <div class="note-back">
+        Aquí empieza un hogar hecho a tu medida y a tu ritmo, aprovéchalo y hazlo tuyo.
+      </div>
+    </div>
+
+    <div class="note" data-id="10">
+      <div class="note-front">🎶 Música</div>
+      <div class="note-back">
+        ¿En serio? Te felicito. Pero dame el placer de escucharte practicar, no hay nada más lindo que tu carita acompañada de música.
+      </div>
+    </div>
+
+    <!-- SIGUEN TODAS LAS DEMÁS -->
+    <!-- (por espacio, las dejo ya integradas en el JS para que no explote el HTML) -->
+
   </main>
 
-  <section id="roulette-wrapper" class="hidden">
-    <h2>🎁 Ruleta de premios</h2>
-    <canvas id="roulette" width="300" height="300"></canvas>
-    <button id="spin-btn">Girar</button>
-  </section>
-
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
