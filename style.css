@@ -1,11 +1,10 @@
 :root {
-  --blue-main: #4a6cf7;
-  --blue-soft: #eaf1ff;
-  --paper: #fff6c9;
-  --text: #4b5563;
+  --blue-main: #4a7ebc;
+  --blue-soft: #dbe9f6;
+  --blue-light: #f2f7fc;
+  --paper: #fffdf7;
 }
 
-/* RESET */
 * {
   box-sizing: border-box;
 }
@@ -13,64 +12,54 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: var(--blue-soft);
-  color: var(--text);
-  position: relative;
-  overflow-x: hidden;
+  background:
+    url("girasol.png") center / 80% no-repeat,
+    var(--blue-light);
+  min-height: 100vh;
+  padding: 40px 20px;
 }
 
-/* GIRASOL MARCA DE AGUA */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: url("girasol.png") no-repeat center;
-  background-size: 65%;
-  opacity: 0.07;
-  filter: blur(1px);
-  z-index: -1;
-}
-
-/* HEADER */
-header {
+h1 {
   text-align: center;
-  padding: 40px 20px 20px;
-}
-
-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 3rem;
   color: var(--blue-main);
-  margin: 0;
+  font-size: 3rem;
+  margin-bottom: 40px;
 }
 
-header p {
-  margin-top: 10px;
-}
-
-/* BOARD */
-.board {
-  max-width: 1300px;
-  margin: auto;
-  padding: 40px;
+/* GRID */
+.grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 25px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* NOTA */
 .note {
   position: relative;
-  height: 160px;
+  height: 170px;
   cursor: pointer;
-  perspective: 1000px;
 }
 
 /* FRENTE */
 .note-front {
   background: var(--paper);
   border-radius: 10px;
-  padding: 15px;
+  padding: 16px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -79,6 +68,7 @@ header p {
   font-weight: 600;
   color: var(--blue-main);
   box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  transform-origin: top center;
   transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 
@@ -88,40 +78,23 @@ header p {
   inset: 0;
   background: var(--paper);
   border-radius: 10px;
-  padding: 15px;
+  padding: 16px;
   font-family: 'Playfair Display', serif;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-origin: top;
-  transform: scaleY(0);
-  transition: transform 0.6s ease;
+  opacity: 0;
+  pointer-events: none;
   box-shadow: 0 12px 25px rgba(0,0,0,0.2);
 }
 
-/* DESPEGAR */
+/* ANIMACIÓN DESPEGAR */
 .note.open .note-front {
-  transform: translateY(-15px) rotateX(65deg);
+  transform: perspective(600px) rotateX(70deg) translateY(-10px);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.25);
 }
 
 .note.open .note-back {
-  transform: scaleY(1);
-}
-
-/* ÚLTIMA FILA CENTRADA */
-.board > .note:nth-last-child(-n+3) {
-  grid-column: span 1;
-}
-
-@media (max-width: 1200px) {
-  .board {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 700px) {
-  .board {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  opacity: 1;
 }
