@@ -1,17 +1,19 @@
-const notes = document.querySelectorAll('.note');
-
-notes.forEach(note => {
+document.querySelectorAll('.note').forEach(note => {
   const id = note.dataset.id;
 
-  // Restaurar estado
-  if (localStorage.getItem(`note-${id}`) === 'open') {
+  note.style.setProperty(
+    '--rot',
+    `${Math.random() * 6 - 3}deg`
+  );
+
+  if (localStorage.getItem('note-' + id) === 'open') {
     note.classList.add('open');
   }
 
   note.addEventListener('click', () => {
     if (!note.classList.contains('open')) {
       note.classList.add('open');
-      localStorage.setItem(`note-${id}`, 'open');
+      localStorage.setItem('note-' + id, 'open');
     }
   });
 });
