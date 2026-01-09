@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Vision Board</title>
+<title>Mis Metas</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
@@ -85,13 +85,15 @@ body::before{
 
 /* RULETA */
 #rouletteOverlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.4);
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:20;
 }
+
 .hidden{display:none}
 
 #rouletteBox{
@@ -110,8 +112,9 @@ body::before{
   border-radius:8px;
   cursor:pointer;
 }
+
 #spinBtn{background:#355c9a;color:white}
-#closeRoulette{background:#ccc}
+#closeRoulette{background:#ddd}
 
 /* CARTA PREMIO */
 #prizeCard{
@@ -125,7 +128,6 @@ body::before{
   font-family:'Playfair Display',serif;
 }
 
-/* RESPONSIVE */
 @media(max-width:900px){.board{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.board{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -140,9 +142,9 @@ body::before{
 <div id="rouletteOverlay" class="hidden">
   <div id="rouletteBox">
     <h2>🎡 Premio</h2>
-    <button id="spinBtn">Girar</button><br>
-    <button id="closeRoulette">Cerrar</button>
+    <button id="spinBtn">Girar</button>
     <p id="rouletteResult"></p>
+    <button id="closeRoulette">Cerrar</button>
   </div>
 </div>
 
@@ -176,6 +178,10 @@ const metas = [
 ];
 
 const board=document.getElementById("board");
+const rouletteOverlay=document.getElementById("rouletteOverlay");
+const rouletteResult=document.getElementById("rouletteResult");
+const prizeCard=document.getElementById("prizeCard");
+
 let opened=JSON.parse(localStorage.getItem("opened")||"[]");
 let claimed=JSON.parse(localStorage.getItem("claimed")||"[]");
 
@@ -188,15 +194,14 @@ metas.forEach((m,i)=>{
     <div class="note-inner">
       <div class="note-face note-front">${m.t}</div>
       <div class="note-face note-back">${m.f}</div>
-    </div>
-  `;
+    </div>`;
 
   note.onclick=()=>{
     if(!note.classList.contains("open")){
       note.classList.add("open");
       opened.push(i);
       localStorage.setItem("opened",JSON.stringify(opened));
-      evaluarRuleta(); // 👈 SOLO AQUÍ
+      evaluarRuleta();
     }
   };
 
@@ -204,7 +209,7 @@ metas.forEach((m,i)=>{
 });
 
 function evaluarRuleta(){
-  let total=opened.reduce((s,i)=>s+metas[i].p,0);
+  const total=opened.reduce((s,i)=>s+metas[i].p,0);
   const hitos=[300,600,900,960];
   if(hitos.includes(total) && !claimed.includes(total)){
     claimed.push(total);
@@ -213,13 +218,7 @@ function evaluarRuleta(){
   }
 }
 
-const rouletteOverlay=document.getElementById("rouletteOverlay");
-const spinBtn=document.getElementById("spinBtn");
-const closeRoulette=document.getElementById("closeRoulette");
-const rouletteResult=document.getElementById("rouletteResult");
-const prizeCard=document.getElementById("prizeCard");
-
-spinBtn.onclick=()=>{
+document.getElementById("spinBtn").onclick=()=>{
   const premios=["Cena","Viaje","Regalo","Sorpresa"];
   const p=premios[Math.floor(Math.random()*premios.length)];
   rouletteResult.innerText="🎁 Premio: "+p;
@@ -227,11 +226,12 @@ spinBtn.onclick=()=>{
   prizeCard.classList.remove("hidden");
 };
 
-closeRoulette.onclick=()=>{
+document.getElementById("closeRoulette").onclick=()=>{
   rouletteOverlay.classList.add("hidden");
+  rouletteResult.innerText="";
 };
 
-/* REINICIO 5s */
+/* RESET 5s */
 let timer;
 title.onmousedown=()=>timer=setTimeout(()=>{localStorage.clear();location.reload()},5000);
 document.onmouseup=()=>clearTimeout(timer);
