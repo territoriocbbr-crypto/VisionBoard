@@ -7,21 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
-/* ---------------- RESET ---------------- */
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
   font-family:'Poppins',sans-serif;
   background:#eaf2ff;
   min-height:100vh;
-  overflow-x:hidden;
 }
 
-/* -------- GIRASOL MARCA DE AGUA -------- */
+/* GIRASOL MARCA DE AGUA */
 body::before{
   content:"";
   position:fixed;
@@ -32,7 +26,7 @@ body::before{
   z-index:-1;
 }
 
-/* ---------------- TITULO ---------------- */
+/* TITULO */
 #title{
   text-align:center;
   font-family:'Playfair Display',serif;
@@ -42,7 +36,7 @@ body::before{
   user-select:none;
 }
 
-/* ---------------- TABLERO ---------------- */
+/* TABLERO */
 .board{
   max-width:1200px;
   margin:auto;
@@ -52,29 +46,17 @@ body::before{
   padding:20px;
 }
 
-/* ---------------- NOTAS ---------------- */
-.note{
-  position:relative;
-  height:170px;
-  perspective:1200px;
-  cursor:pointer;
-}
-
+/* NOTAS */
+.note{height:170px;perspective:1200px;cursor:pointer}
 .note-inner{
-  width:100%;
-  height:100%;
-  position:relative;
-  transition:transform 0.9s cubic-bezier(.4,.2,.2,1);
+  width:100%;height:100%;
+  transition:transform .9s cubic-bezier(.4,.2,.2,1);
   transform-style:preserve-3d;
 }
-
-.note.open .note-inner{
-  transform:rotateY(180deg) translateY(-8px);
-}
+.note.open .note-inner{transform:rotateY(180deg) translateY(-8px)}
 
 .note-face{
-  position:absolute;
-  inset:0;
+  position:absolute;inset:0;
   border-radius:10px;
   padding:14px;
   display:flex;
@@ -82,64 +64,56 @@ body::before{
   justify-content:center;
   text-align:center;
   backface-visibility:hidden;
-  overflow:hidden;
 }
 
 .note-front{
   background:#cfe0ff;
   color:#1f3c6d;
   font-weight:600;
-  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+  box-shadow:0 6px 12px rgba(0,0,0,.15);
 }
 
 .note-back{
   background:#f5f8ff;
   color:#1f3c6d;
   font-family:'Playfair Display',serif;
-  font-size:0.9rem;
+  font-size:.9rem;
   line-height:1.25;
   transform:rotateY(180deg);
-  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+  box-shadow:0 6px 12px rgba(0,0,0,.15);
 }
 
-/* --------- TEXTO NO SE CORTA ---------- */
-.note-back p{
-  word-wrap:break-word;
-  overflow-wrap:break-word;
-}
-
-/* ---------------- RULETA ---------------- */
+/* RULETA */
 #rouletteOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.4);
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.4);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:20;
 }
-
 .hidden{display:none}
 
 #rouletteBox{
-  background:#ffffff;
+  background:#fff;
   border-radius:16px;
   padding:30px;
   text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
 }
 
-#spinBtn{
-  padding:12px 24px;
-  font-size:1.1rem;
-  background:#355c9a;
-  color:white;
+#spinBtn,#closeRoulette{
+  margin-top:12px;
+  padding:10px 20px;
+  font-size:1rem;
   border:none;
   border-radius:8px;
   cursor:pointer;
 }
+#spinBtn{background:#355c9a;color:white}
+#closeRoulette{background:#ccc}
 
-/* ---------------- CARTA PREMIO ---------------- */
+/* CARTA PREMIO */
 #prizeCard{
   position:fixed;
   bottom:20px;
@@ -147,32 +121,27 @@ body::before{
   background:#fff;
   border-radius:12px;
   padding:16px 20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
-  z-index:30;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
   font-family:'Playfair Display',serif;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
-@media(max-width:900px){
-  .board{grid-template-columns:repeat(3,1fr);}
-}
-@media(max-width:600px){
-  .board{grid-template-columns:repeat(2,1fr);}
-}
+/* RESPONSIVE */
+@media(max-width:900px){.board{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.board{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 
 <body>
 
 <h1 id="title">Mis metas</h1>
-
 <div class="board" id="board"></div>
 
 <!-- RULETA -->
 <div id="rouletteOverlay" class="hidden">
   <div id="rouletteBox">
-    <h2>🎡 Premio</h2><br>
-    <button id="spinBtn">Girar</button>
+    <h2>🎡 Premio</h2>
+    <button id="spinBtn">Girar</button><br>
+    <button id="closeRoulette">Cerrar</button>
     <p id="rouletteResult"></p>
   </div>
 </div>
@@ -180,7 +149,6 @@ body::before{
 <div id="prizeCard" class="hidden"></div>
 
 <script>
-/* ---------------- DATOS ---------------- */
 const metas = [
 {t:"💙 Salud",p:20,f:"Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad."},
 {t:"✈️ Viajes",p:30,f:"Fuiste valiente al salir, y el mundo respondió abriéndote caminos.\nCada viaje te devolvió un poco más de ti"},
@@ -209,8 +177,8 @@ const metas = [
 
 const board=document.getElementById("board");
 let opened=JSON.parse(localStorage.getItem("opened")||"[]");
+let claimed=JSON.parse(localStorage.getItem("claimed")||"[]");
 
-/* -------- CREAR NOTAS -------- */
 metas.forEach((m,i)=>{
   const note=document.createElement("div");
   note.className="note";
@@ -219,57 +187,54 @@ metas.forEach((m,i)=>{
   note.innerHTML=`
     <div class="note-inner">
       <div class="note-face note-front">${m.t}</div>
-      <div class="note-face note-back"><p>${m.f}</p></div>
+      <div class="note-face note-back">${m.f}</div>
     </div>
   `;
+
   note.onclick=()=>{
     if(!note.classList.contains("open")){
       note.classList.add("open");
       opened.push(i);
       localStorage.setItem("opened",JSON.stringify(opened));
-      checkPoints();
+      evaluarRuleta(); // 👈 SOLO AQUÍ
     }
   };
+
   board.appendChild(note);
 });
 
-/* -------- RULETA -------- */
-const rouletteOverlay=document.getElementById("rouletteOverlay");
-const spinBtn=document.getElementById("spinBtn");
-const rouletteResult=document.getElementById("rouletteResult");
-const prizeCard=document.getElementById("prizeCard");
-
-const prizes=["Cena","Viaje","Regalo","Sorpresa"];
-const milestones=[300,600,900,960];
-let claimed=JSON.parse(localStorage.getItem("claimed")||"[]");
-
-function checkPoints(){
-  let total=0;
-  opened.forEach(i=>total+=metas[i].p);
-  if(milestones.includes(total) && !claimed.includes(total)){
-    rouletteOverlay.classList.remove("hidden");
+function evaluarRuleta(){
+  let total=opened.reduce((s,i)=>s+metas[i].p,0);
+  const hitos=[300,600,900,960];
+  if(hitos.includes(total) && !claimed.includes(total)){
     claimed.push(total);
     localStorage.setItem("claimed",JSON.stringify(claimed));
+    rouletteOverlay.classList.remove("hidden");
   }
 }
 
+const rouletteOverlay=document.getElementById("rouletteOverlay");
+const spinBtn=document.getElementById("spinBtn");
+const closeRoulette=document.getElementById("closeRoulette");
+const rouletteResult=document.getElementById("rouletteResult");
+const prizeCard=document.getElementById("prizeCard");
+
 spinBtn.onclick=()=>{
-  const prize=prizes[Math.floor(Math.random()*prizes.length)];
-  rouletteResult.innerText="🎁 Premio: "+prize;
-  prizeCard.innerText="🎁 Premio pendiente: "+prize;
+  const premios=["Cena","Viaje","Regalo","Sorpresa"];
+  const p=premios[Math.floor(Math.random()*premios.length)];
+  rouletteResult.innerText="🎁 Premio: "+p;
+  prizeCard.innerText="🎁 Premio pendiente: "+p;
   prizeCard.classList.remove("hidden");
+};
+
+closeRoulette.onclick=()=>{
   rouletteOverlay.classList.add("hidden");
 };
 
-/* -------- REINICIO -------- */
+/* REINICIO 5s */
 let timer;
-document.getElementById("title").addEventListener("mousedown",()=>{
-  timer=setTimeout(()=>{
-    localStorage.clear();
-    location.reload();
-  },5000);
-});
-document.addEventListener("mouseup",()=>clearTimeout(timer));
+title.onmousedown=()=>timer=setTimeout(()=>{localStorage.clear();location.reload()},5000);
+document.onmouseup=()=>clearTimeout(timer);
 </script>
 
 </body>
