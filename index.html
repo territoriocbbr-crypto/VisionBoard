@@ -5,161 +5,272 @@
 <title>Vision Board</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+
+<style>
+/* ---------------- RESET ---------------- */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#eaf2ff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* -------- GIRASOL MARCA DE AGUA -------- */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("girasol.png") center/70% no-repeat;
+  opacity:0.06;
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* ---------------- TITULO ---------------- */
+#title{
+  text-align:center;
+  font-family:'Playfair Display',serif;
+  font-size:3rem;
+  color:#355c9a;
+  padding:20px;
+  user-select:none;
+}
+
+/* ---------------- TABLERO ---------------- */
+.board{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:20px;
+  padding:20px;
+}
+
+/* ---------------- NOTAS ---------------- */
+.note{
+  position:relative;
+  height:170px;
+  perspective:1200px;
+  cursor:pointer;
+}
+
+.note-inner{
+  width:100%;
+  height:100%;
+  position:relative;
+  transition:transform 0.9s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+
+.note.open .note-inner{
+  transform:rotateY(180deg) translateY(-8px);
+}
+
+.note-face{
+  position:absolute;
+  inset:0;
+  border-radius:10px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  backface-visibility:hidden;
+  overflow:hidden;
+}
+
+.note-front{
+  background:#cfe0ff;
+  color:#1f3c6d;
+  font-weight:600;
+  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+
+.note-back{
+  background:#f5f8ff;
+  color:#1f3c6d;
+  font-family:'Playfair Display',serif;
+  font-size:0.9rem;
+  line-height:1.25;
+  transform:rotateY(180deg);
+  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* --------- TEXTO NO SE CORTA ---------- */
+.note-back p{
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+}
+
+/* ---------------- RULETA ---------------- */
+#rouletteOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+
+.hidden{display:none}
+
+#rouletteBox{
+  background:#ffffff;
+  border-radius:16px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+
+#spinBtn{
+  padding:12px 24px;
+  font-size:1.1rem;
+  background:#355c9a;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* ---------------- CARTA PREMIO ---------------- */
+#prizeCard{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#fff;
+  border-radius:12px;
+  padding:16px 20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  z-index:30;
+  font-family:'Playfair Display',serif;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media(max-width:900px){
+  .board{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:600px){
+  .board{grid-template-columns:repeat(2,1fr);}
+}
+</style>
 </head>
 
 <body>
 
 <h1 id="title">Mis metas</h1>
 
-<div class="board">
+<div class="board" id="board"></div>
 
-<!-- 1 -->
-<div class="note" data-id="1" data-points="20">
-  <div class="front">💙 Salud</div>
-  <div class="back">Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad.</div>
+<!-- RULETA -->
+<div id="rouletteOverlay" class="hidden">
+  <div id="rouletteBox">
+    <h2>🎡 Premio</h2><br>
+    <button id="spinBtn">Girar</button>
+    <p id="rouletteResult"></p>
+  </div>
 </div>
 
-<!-- 2 -->
-<div class="note" data-id="2" data-points="30">
-  <div class="front">✈️ Viajes</div>
-  <div class="back">Fuiste valiente al salir, y el mundo respondió abriéndote caminos.  
-Cada viaje te devolvió un poco más de ti</div>
-</div>
+<div id="prizeCard" class="hidden"></div>
 
-<!-- 3 -->
-<div class="note" data-id="3" data-points="30">
-  <div class="front">💼 Estabilidad laboral</div>
-  <div class="back">Todo el esfuerzo silencioso encontró su lugar. Te lo mereces siempre has sido una gran trabajadora y la más hábil en tu campo, te deseo más y más crecimiento laboral. Vamos por más puntos.</div>
-</div>
+<script>
+/* ---------------- DATOS ---------------- */
+const metas = [
+{t:"💙 Salud",p:20,f:"Gracias por elegirte incluso en los días difíciles. Tu cuerpo también celebra este logro. Y yo… respiro con más tranquilidad."},
+{t:"✈️ Viajes",p:30,f:"Fuiste valiente al salir, y el mundo respondió abriéndote caminos.\nCada viaje te devolvió un poco más de ti"},
+{t:"💼 Estabilidad laboral",p:30,f:"Todo el esfuerzo silencioso encontró su lugar. Te lo mereces siempre has sido una gran trabajadora y la más hábil en tu campo, te deseo más y más crecimiento laboral. Vamos por más puntos."},
+{t:"🌱 Amor propio",p:50,f:"Aprendiste a tratarte con la misma ternura que das a los demás, eres un tesoro no para presumir si no para apreciar y valorar."},
+{t:"📘 Pasaporte",p:30,f:"Un documento pequeño… y un mundo entero diciendo “bienvenida”."},
+{t:"😄 Reír más seguido",p:50,f:"Excelenteeee me alegra saber que estas cada vez más feliz, Quizá no siempre logre sacarte una sonrisa, pero espero que nunca falte la esperanza de tu sonrisa en el mundo."},
+{t:"🚗 Licencia",p:30,f:"Lo lograste, te felicito muchísimo ahora tú llevas el volante, en todos los sentidos, y espero que en algunas de esas ocasiones pueda ser tu copiloto."},
+{t:"💰 Ahorrar",p:50,f:"Paso a paso construiste tranquilidad. Y eso también es éxito, ya puedes comprarme algo también jeje."},
+{t:"🏠 Apartamento",p:20,f:"Aquí empieza un hogar hecho a tu medida y a tu ritmo, aprovecha tu espacio y acomódalo a tu gusto."},
+{t:"🎶 Música",p:50,f:"¿Que? ¿En serio? ¿Lograste aprender un instrumento? Te felicito, pero por favor dame el placer de escucharte practicar, que seria mas lindo que tu carita acompañada de música que tu misma haces."},
+{t:"🙏 Dios",p:50,f:"Bien, ahora soy yo quien necesita acercarse a él, y pedir que pueda seguir acompañándote en tu camino, no fue distancia lo que recorriste, fue profundidad."},
+{t:"✨ Agradecer",p:50,f:"Aprendiste a ver lo que antes pasaba desapercibido, muchas veces no somos conscientes de lo que nos rodea y lo que hacen quienes nos rodean, si se esfuerzan por ti es porque eres valiosa pero también es valioso el esfuerzo que te dedican. Vamos por mas puntos monita."},
+{t:"💵 Dinero",p:20,f:"Hoy el dinero dejó de ser peso y se volvió herramienta, que este sea un motivo para continuar con tus ideas, con tus sueños, ¿y porque no? Tus antojos, date gusto."},
+{t:"🥗 Alimentarme bien",p:50,f:"Urraaaaa me alegra que completaras este, aunque ojalá puedas seguir recibiendo la comida que te envíe, mi forma de consentirte era alimentándote, Te cuidaste sin castigarte. Eso también es amor."},
+{t:"📚 Leer",p:50,f:"Cada página fue una conversación contigo misma, sigue conociéndote, sigue aprendiendo y nunca dejes de crecer, si hoy eres fascinante, ¿cómo serás en unos años?"},
+{t:"🚀 Emprendimiento",p:50,f:"Te atreviste a creer en tu idea cuando aún era frágil, y hoy tienes el empuje para cumplirla, recuerda que esto es solo una pequeña parte de todo lo que eres capaz de hacer, sigue mas allá de la meta."},
+{t:"👨‍👩‍👧‍👦 Compartir",p:50,f:"Quizás no todos merecen tu tiempo, pero identificar a quienes si hace que el tiempo compartido siempre sea la mejor inversión."},
+{t:"🎤 No alejarme de la música",p:50,f:"Gracias por no soltar lo que te sostiene por dentro, Nunca dejaste que el ruido apagara lo que te hace vibrar, además un día me pondrás el micrófono y si sabre como es la letra de la canción para que la cantemos al unisonó."},
+{t:"🫶 Cuidarme",p:50,f:"Escucharte fue el acto más valiente, no esperes soluciones externas cuando quien realmente debe identificar lo grandiosa que es, eres tú misma."},
+{t:"🌻 Girasoles",p:30,f:"Si cumpliste este espero haber sido participe de esta meta, y haberte dado mas flores este año sin que te lo esperaras y permitiéndome el pequeño capricho de verte feliz."},
+{t:"⏳ Disciplina",p:50,f:"No fue rigidez, fue constancia con propósito lo que te permitió lograr cada una de las metas y propósitos, de poco a poco se logran las grandes cosas así que nunca desistas de seguirlo intentando, de seguir luchando por lo que mereces."},
+{t:"🌍 Idiomas",p:50,f:"Ahora tus ideas también saben viajar en otros idiomas espero ahora si podamos escuchar más música en ingles jeje y que pueda alocarme escuchándote hablar en francés, porque se que te queda muy bien."},
+{t:"🎓 Estudiar",p:50,f:"Seguiste creciendo incluso cuando nadie estaba mirando y es que eso eres tú, alguien que posee la capacidad de crecer mas de lo que los demás llegaron a creer, sigue así."}
+];
 
-<!-- 4 -->
-<div class="note" data-id="4" data-points="50">
-  <div class="front">🌱 Amor propio</div>
-  <div class="back">Aprendiste a tratarte con la misma ternura que das a los demás, eres un tesoro no para presumir si no para apreciar y valorar.</div>
-</div>
+const board=document.getElementById("board");
+let opened=JSON.parse(localStorage.getItem("opened")||"[]");
 
-<!-- 5 -->
-<div class="note" data-id="5" data-points="30">
-  <div class="front">📘 Pasaporte</div>
-  <div class="back">Un documento pequeño… y un mundo entero diciendo “bienvenida”.</div>
-</div>
+/* -------- CREAR NOTAS -------- */
+metas.forEach((m,i)=>{
+  const note=document.createElement("div");
+  note.className="note";
+  if(opened.includes(i)) note.classList.add("open");
 
-<!-- 6 -->
-<div class="note" data-id="6" data-points="50">
-  <div class="front">😄 Reír más seguido</div>
-  <div class="back">Excelenteeee me alegra saber que estas cada vez más feliz, Quizá no siempre logre sacarte una sonrisa, pero espero que nunca falte la esperanza de tu sonrisa en el mundo.</div>
-</div>
+  note.innerHTML=`
+    <div class="note-inner">
+      <div class="note-face note-front">${m.t}</div>
+      <div class="note-face note-back"><p>${m.f}</p></div>
+    </div>
+  `;
+  note.onclick=()=>{
+    if(!note.classList.contains("open")){
+      note.classList.add("open");
+      opened.push(i);
+      localStorage.setItem("opened",JSON.stringify(opened));
+      checkPoints();
+    }
+  };
+  board.appendChild(note);
+});
 
-<!-- 7 -->
-<div class="note" data-id="7" data-points="30">
-  <div class="front">🚗 Licencia</div>
-  <div class="back">Lo lograste, te felicito muchísimo ahora tú llevas el volante, en todos los sentidos, y espero que en algunas de esas ocasiones pueda ser tu copiloto.</div>
-</div>
+/* -------- RULETA -------- */
+const rouletteOverlay=document.getElementById("rouletteOverlay");
+const spinBtn=document.getElementById("spinBtn");
+const rouletteResult=document.getElementById("rouletteResult");
+const prizeCard=document.getElementById("prizeCard");
 
-<!-- 8 -->
-<div class="note" data-id="8" data-points="50">
-  <div class="front">💰 Ahorrar</div>
-  <div class="back">Paso a paso construiste tranquilidad. Y eso también es éxito, ya puedes comprarme algo también jeje.</div>
-</div>
+const prizes=["Cena","Viaje","Regalo","Sorpresa"];
+const milestones=[300,600,900,960];
+let claimed=JSON.parse(localStorage.getItem("claimed")||"[]");
 
-<!-- 9 -->
-<div class="note" data-id="9" data-points="20">
-  <div class="front">🏠 Apartamento</div>
-  <div class="back">Aquí empieza un hogar hecho a tu medida y a tu ritmo, aprovecha tu espacio y acomódalo a tu gusto.</div>
-</div>
+function checkPoints(){
+  let total=0;
+  opened.forEach(i=>total+=metas[i].p);
+  if(milestones.includes(total) && !claimed.includes(total)){
+    rouletteOverlay.classList.remove("hidden");
+    claimed.push(total);
+    localStorage.setItem("claimed",JSON.stringify(claimed));
+  }
+}
 
-<!-- 10 -->
-<div class="note" data-id="10" data-points="50">
-  <div class="front">🎶 Música</div>
-  <div class="back">¿Que? ¿En serio? ¿Lograste aprender un instrumento? Te felicito, pero por favor dame el placer de escucharte practicar, que seria mas lindo que tu carita acompañada de música que tu misma haces.</div>
-</div>
+spinBtn.onclick=()=>{
+  const prize=prizes[Math.floor(Math.random()*prizes.length)];
+  rouletteResult.innerText="🎁 Premio: "+prize;
+  prizeCard.innerText="🎁 Premio pendiente: "+prize;
+  prizeCard.classList.remove("hidden");
+  rouletteOverlay.classList.add("hidden");
+};
 
-<!-- 11 -->
-<div class="note" data-id="11" data-points="50">
-  <div class="front">🙏 Dios</div>
-  <div class="back">Bien, ahora soy yo quien necesita acercarse a él, y pedir que pueda seguir acompañándote en tu camino, no fue distancia lo que recorriste, fue profundidad.</div>
-</div>
+/* -------- REINICIO -------- */
+let timer;
+document.getElementById("title").addEventListener("mousedown",()=>{
+  timer=setTimeout(()=>{
+    localStorage.clear();
+    location.reload();
+  },5000);
+});
+document.addEventListener("mouseup",()=>clearTimeout(timer));
+</script>
 
-<!-- 12 -->
-<div class="note" data-id="12" data-points="50">
-  <div class="front">✨ Agradecer</div>
-  <div class="back">Aprendiste a ver lo que antes pasaba desapercibido, muchas veces no somos conscientes de lo que nos rodea y lo que hacen quienes nos rodean, si se esfuerzan por ti es porque eres valiosa pero también es valioso el esfuerzo que te dedican. Vamos por mas puntos monita.</div>
-</div>
-
-<!-- 13 -->
-<div class="note" data-id="13" data-points="20">
-  <div class="front">💵 Dinero</div>
-  <div class="back">Hoy el dinero dejó de ser peso y se volvió herramienta, que este sea un motivo para continuar con tus ideas, con tus sueños, ¿y porque no? Tus antojos, date gusto.</div>
-</div>
-
-<!-- 14 -->
-<div class="note" data-id="14" data-points="50">
-  <div class="front">🥗 Alimentarme bien</div>
-  <div class="back">Urraaaaa me alegra que completaras este, aunque ojalá puedas seguir recibiendo la comida que te envíe, mi forma de consentirte era alimentándote, Te cuidaste sin castigarte. Eso también es amor.</div>
-</div>
-
-<!-- 15 -->
-<div class="note" data-id="15" data-points="50">
-  <div class="front">📚 Leer</div>
-  <div class="back">Cada página fue una conversación contigo misma, sigue conociéndote, sigue aprendiendo y nunca dejes de crecer, si hoy eres fascinante, ¿cómo serás en unos años?</div>
-</div>
-
-<!-- 16 -->
-<div class="note" data-id="16" data-points="50">
-  <div class="front">🚀 Emprendimiento</div>
-  <div class="back">Te atreviste a creer en tu idea cuando aún era frágil, y hoy tienes el empuje para cumplirla, recuerda que esto es solo una pequeña parte de todo lo que eres capaz de hacer, sigue mas allá de la meta.</div>
-</div>
-
-<!-- 17 -->
-<div class="note" data-id="17" data-points="50">
-  <div class="front">👨‍👩‍👧‍👦 Compartir</div>
-  <div class="back">Quizás no todos merecen tu tiempo, pero identificar a quienes si hace que el tiempo compartido siempre sea la mejor inversión.</div>
-</div>
-
-<!-- 18 -->
-<div class="note" data-id="18" data-points="50">
-  <div class="front">🎤 No alejarme de la música</div>
-  <div class="back">Gracias por no soltar lo que te sostiene por dentro, Nunca dejaste que el ruido apagara lo que te hace vibrar, además un día me pondrás el micrófono y si sabre como es la letra de la canción para que la cantemos al unisonó.</div>
-</div>
-
-<!-- 19 -->
-<div class="note" data-id="19" data-points="50">
-  <div class="front">🫶 Cuidarme</div>
-  <div class="back">Escucharte fue el acto más valiente, no esperes soluciones externas cuando quien realmente debe identificar lo grandiosa que es, eres tú misma.</div>
-</div>
-
-<!-- 20 -->
-<div class="note" data-id="20" data-points="30">
-  <div class="front">🌻 Girasoles</div>
-  <div class="back">Si cumpliste este espero haber sido participe de esta meta, y haberte dado mas flores este año sin que te lo esperaras y permitiéndome el pequeño capricho de verte feliz.</div>
-</div>
-
-<!-- 21 -->
-<div class="note" data-id="21" data-points="50">
-  <div class="front">⏳ Disciplina</div>
-  <div class="back">No fue rigidez, fue constancia con propósito lo que te permitió lograr cada una de las metas y propósitos, de poco a poco se logran las grandes cosas así que nunca desistas de seguirlo intentando, de seguir luchando por lo que mereces.</div>
-</div>
-
-<!-- 22 -->
-<div class="note" data-id="22" data-points="50">
-  <div class="front">🌍 Idiomas</div>
-  <div class="back">Ahora tus ideas también saben viajar en otros idiomas espero ahora si podamos escuchar más música en ingles jeje y que pueda alocarme escuchándote hablar en francés, porque se que te queda muy bien.</div>
-</div>
-
-<!-- 23 -->
-<div class="note" data-id="23" data-points="50">
-  <div class="front">🎓 Estudiar</div>
-  <div class="back">Seguiste creciendo incluso cuando nadie estaba mirando y es que eso eres tú, alguien que posee la capacidad de crecer mas de lo que los demás llegaron a creer, sigue así.</div>
-</div>
-
-</div>
-
-<div id="rouletteContainer" class="hidden">
-  <button id="spin">🎡 Girar</button>
-  <div id="result"></div>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
